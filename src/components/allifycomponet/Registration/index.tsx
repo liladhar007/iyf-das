@@ -6,6 +6,7 @@ import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box } from '@mui/material';
 import { IoPersonAddSharp } from "react-icons/io5";
 import FormModal from '../Attendence/FormModal';
+import DetailesModal from './DetailesModal';
 
 // Example data type
 type Person = {
@@ -72,40 +73,9 @@ const Registration = () => {
       <FormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} />
 
       {/* Beautiful Modal/Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ bgcolor: '#1976d2', color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
-          Student Details
-        </DialogTitle>
-        <DialogContent>
-          {selectedRow ? (
-            <Box sx={{ p: 2, textAlign: 'center' }}>
-              <Typography variant="h5" fontWeight="bold" color="primary">
-                {selectedRow.name.firstName} {selectedRow.name.lastName}
-              </Typography>
-              <Typography variant="body1" sx={{ mt: 1 }}>
-                <strong>Address:</strong> {selectedRow.address}
-              </Typography>
-              <Typography variant="body1" sx={{ mt: 1 }}>
-                <strong>City:</strong> {selectedRow.city}
-              </Typography>
-              <Typography variant="body1" sx={{ mt: 1 }}>
-                <strong>State:</strong> {selectedRow.state}
-              </Typography>
-            </Box>
-          ) : (
-            <Typography textAlign="center">No details available</Typography>
-          )}
-        </DialogContent>
-        <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-          <Button 
-            onClick={() => setOpen(false)} 
-            variant="contained" 
-            sx={{ bgcolor: '#1976d2', '&:hover': { bgcolor: '#125ea3' } }}
-          >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+    
+      <DetailesModal  isOpen={open}
+        closeModal={() => setOpen(false)} selectedRow={selectedRow}/>
     </>
   );
 };

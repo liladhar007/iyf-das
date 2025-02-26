@@ -1,12 +1,8 @@
 import React from 'react';
-import { PiStudentBold } from "react-icons/pi";
-import {
-  MdHome,
- 
-  MdLock,
-  MdAddTask,
-} from 'react-icons/md';
-import { MdOutlineAppRegistration } from "react-icons/md";
+import { PiStudentBold } from 'react-icons/pi';
+import { MdHome, MdLock, MdAddTask } from 'react-icons/md';
+import { MdOutlineAppRegistration } from 'react-icons/md';
+import { FaPeopleGroup } from 'react-icons/fa6';
 
 const routes = [
   {
@@ -27,15 +23,18 @@ const routes = [
     layout: '/admin',
     path: '/mystudent',
     icon: <PiStudentBold />,
-
   },
   {
     name: 'Registration',
     layout: '/admin',
     path: '/registration',
-    icon: <MdOutlineAppRegistration />
-    ,
-
+    icon: <MdOutlineAppRegistration />,
+  },
+  {
+    name: 'All Batches',
+    layout: '/admin',
+    path: '/batches',
+    icon: <FaPeopleGroup />,
   },
   {
     name: 'Sign In',
