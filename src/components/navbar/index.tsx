@@ -2,16 +2,9 @@ import React from 'react';
 import Dropdown from 'components/dropdown';
 import { FiAlignJustify } from 'react-icons/fi';
 import NavLink from 'components/link/NavLink';
-import navbarimage from '/public/img/layout/Navbar.png';
-import { BsArrowBarUp } from 'react-icons/bs';
-import { FiSearch } from 'react-icons/fi';
 import { RiMoonFill, RiSunFill } from 'react-icons/ri';
-// import { RiMoonFill, RiSunFill } from 'react-icons/ri';
-// import Configurator from './Configurator';
-import {
-  IoMdNotificationsOutline,
-  IoMdInformationCircleOutline,
-} from 'react-icons/io';
+
+
 import avatar from '/public/img/avatars/avatar4.png';
 import Image from 'next/image';
 
@@ -41,14 +34,14 @@ const Navbar = (props: {
           </a>
           <NavLink
             className="text-sm font-normal capitalize text-navy-700 hover:underline dark:text-white dark:hover:text-white"
-            href="#"
+            href=""
           >
             {brandText}
           </NavLink>
         </div>
         <p className="shrink text-[22px] capitalize text-navy-700 dark:text-white">
           <NavLink
-            href="#"
+            href=""
             className="font-bold capitalize hover:text-navy-700 dark:hover:text-white"
           >
             {brandText}
@@ -93,9 +86,9 @@ const Navbar = (props: {
               alt="Elon Musk"
             />
           }
-          classNames={'py-2 top-8 -left-[180px] w-max'}
+          classNames={'py-2 top-8 -left-[300px] w-max'}
         >
-          <div className="flex h-48 w-56 flex-col justify-start rounded-[20px] bg-white bg-cover bg-no-repeat shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:text-white dark:shadow-none">
+          <div className="flex h-[400px] w-[330px] flex-col justify-start rounded-[20px] bg-white bg-cover bg-no-repeat shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:text-white dark:shadow-none">
             <div className="ml-4 mt-3">
               <div className="flex items-center gap-2">
                 <p className="text-sm font-bold text-navy-700 dark:text-white">
@@ -110,14 +103,9 @@ const Navbar = (props: {
                 href=" "
                 className="text-sm text-gray-800 dark:text-white hover:dark:text-white"
               >
-                Profile Settings
+                Profile 
               </a>
-              <a
-                href=" "
-                className="mt-3 text-sm text-gray-800 dark:text-white hover:dark:text-white"
-              >
-                Newsletter Settings
-              </a>
+         
               <a
                 href=" "
                 className="mt-3 text-sm font-medium text-red-500 hover:text-red-500"
