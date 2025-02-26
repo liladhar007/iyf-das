@@ -6,7 +6,9 @@
 const Dashboard = () => {
   return (
     <>
-    jnknj
+<div className="flex justify-center items-center h-screen">
+  <h1 className="text-3xl font-bold text-gray-900">Main Dashboard</h1>
+</div>
     </>
   );
 };
