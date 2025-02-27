@@ -1,8 +1,8 @@
 import React from 'react';
 import { PiStudentBold } from 'react-icons/pi';
 import { MdHome, MdLock, MdAddTask } from 'react-icons/md';
-import { MdOutlineAppRegistration } from 'react-icons/md';
 import { FaPeopleGroup } from 'react-icons/fa6';
+import { IoIosMan } from 'react-icons/io';
 
 const routes = [
   {
@@ -24,17 +24,18 @@ const routes = [
     path: '/mystudent',
     icon: <PiStudentBold />,
   },
-  {
-    name: 'Registration',
-    layout: '/admin',
-    path: '/registration',
-    icon: <MdOutlineAppRegistration />,
-  },
+
   {
     name: 'All Batches',
     layout: '/admin',
     path: '/batches',
     icon: <FaPeopleGroup />,
+  },
+  {
+    name: 'Facilitators',
+    layout: '/admin',
+    path: '/facilitators',
+    icon: <IoIosMan />,
   },
   // {
   //   name: 'Das-Accounts',

@@ -28,11 +28,11 @@ const Dashboard = () => {
           title={'Total Register'}
           subtitle={'1574'}
         />
-        <Widget
+        {/* <Widget
           icon={<MdDashboard className="h-6 w-6" />}
           title={'Data List Report'}
           subtitle={'1,000'}
-        />
+        /> */}
         <Widget
           icon={<MdBarChart className="h-7 w-7" />}
           title={'Weekly Totel Registered'}

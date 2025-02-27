@@ -2,11 +2,9 @@
 import { useMemo, useState } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { ToastContainer, toast } from 'react-toastify';
-import { IoPersonAddSharp } from 'react-icons/io5';
 import { MdAddTask } from 'react-icons/md';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import FormModal from './FormModal';
 
 // Example data type
 type Person = {
