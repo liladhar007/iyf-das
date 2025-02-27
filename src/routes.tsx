@@ -36,6 +36,12 @@ const routes = [
     path: '/batches',
     icon: <FaPeopleGroup />,
   },
+  // {
+  //   name: 'Das-Accounts',
+  //   layout: '/admin',
+  //   path: '/dasAccounts',
+  //   icon: <FaPeopleGroup />,
+  // },
   {
     name: 'Sign In',
     layout: '/auth',

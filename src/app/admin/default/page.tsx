@@ -14,33 +14,33 @@ const Dashboard = () => {
       <div className="mt-3 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
         <Widget
           icon={<MdBarChart className="h-7 w-7" />}
-          title={'Earnings'}
-          subtitle={'$340.5'}
+          title={'Total Amount'}
+          subtitle={'Rs 340.5'}
         />
         <Widget
           icon={<IoDocuments className="h-6 w-6" />}
-          title={'Spend this month'}
-          subtitle={'$642.39'}
+          title={'Pending Amount'}
+          subtitle={'Rs 642.39'}
         />
         <Widget
           icon={<MdBarChart className="h-7 w-7" />}
-          title={'Sales'}
-          subtitle={'$574.34'}
+          title={'Total Register'}
+          subtitle={'1574'}
         />
         <Widget
           icon={<MdDashboard className="h-6 w-6" />}
-          title={'Your Balance'}
-          subtitle={'$1,000'}
+          title={'Data List Report'}
+          subtitle={'1,000'}
         />
         <Widget
           icon={<MdBarChart className="h-7 w-7" />}
-          title={'New Tasks'}
+          title={'Weekly Totel Registered'}
           subtitle={'145'}
         />
         <Widget
           icon={<IoMdHome className="h-6 w-6" />}
-          title={'Total Projects'}
-          subtitle={'$2433'}
+          title={'Total Students'}
+          subtitle={'2433'}
         />
       </div>
 
