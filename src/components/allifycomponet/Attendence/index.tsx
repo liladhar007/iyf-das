@@ -100,14 +100,8 @@ const Attendance = () => {
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-wrap justify-between gap-4 p-4">
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex w-full items-center rounded-full bg-indigo-900 px-6 py-3 text-lg font-medium text-white hover:bg-indigo-800 sm:w-auto"
-        >
-          <IoPersonAddSharp />
-          <span className="pl-2">Add Student</span>
-        </button>
+      <div className="flex flex-wrap justify-end gap-4 p-4">
+  
         <button
           onClick={handleSubmit}
           className="flex w-full items-center rounded-full bg-indigo-900 px-6 py-3 text-lg font-medium text-white hover:bg-indigo-800 sm:w-auto"
@@ -155,11 +149,7 @@ const Attendance = () => {
         </>
       )}
 
-      {/* Modal Component */}
-      <FormModal
-        isOpen={isModalOpen}
-        closeModal={() => setIsModalOpen(false)}
-      />
+   
     </>
   );
 };

@@ -1,10 +1,11 @@
 'use client';
-import WeeklyRevenue from 'components/admin/default/WeeklyRevenue';
-import TotalSpent from 'components/admin/default/TotalSpent';
+// import WeeklyRevenue from 'components/admin/default/WeeklyRevenue';
+// import TotalSpent from 'components/admin/default/TotalSpent';
 import { IoMdHome } from 'react-icons/io';
 import { IoDocuments } from 'react-icons/io5';
 import { MdBarChart, MdDashboard } from 'react-icons/md';
 import Widget from 'components/widget/Widget';
+import CallingSystem from 'components/allifycomponet/callingSystem';
 
 const Dashboard = () => {
   return (
@@ -46,9 +47,11 @@ const Dashboard = () => {
 
       {/* Charts */}
 
-      <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
-        <TotalSpent />
-        <WeeklyRevenue />
+      <div className="mt-5">
+        {/* <TotalSpent />
+        <WeeklyRevenue /> */}
+        <h2 className="text-lg font-bold mb-3 dark:text-white">Calling System</h2>
+        <CallingSystem/>
       </div>
     </div>
   );
