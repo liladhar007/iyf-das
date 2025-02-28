@@ -16,7 +16,7 @@ const Facilitators = () => {
       <div className="overflow-x-auto flex justify-center">
         <table className="w-full border border-gray-300 dark:border-gray-700 shadow-xl rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-blue-500 dark:bg-blue-700 text-white">
+            <tr className="bg-gray-900 dark:bg-gray-900 text-white">
               <th className="p-3 text-left">Name</th>
               <th className="p-3 text-left">Number</th>
               <th className="p-3 text-left">Class</th>
