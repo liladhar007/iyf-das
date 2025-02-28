@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
 import Dropdown from 'components/dropdown';
 import { FiAlignJustify } from 'react-icons/fi';
 import NavLink from 'components/link/NavLink';
@@ -10,6 +11,18 @@ import avatar from '/public/img/avatars/avatar4.png';
 import Image from 'next/image';
 import { IoPersonAddSharp } from 'react-icons/io5';
 import FormModal from 'components/allifycomponet/Attendence/FormModal';
+const users = [
+  { id: 1, name: "Jese Leos", image: "/docs/images/people/profile-picture-1.jpg" },
+  { id: 2, name: "Robert Gough", image: "/docs/images/people/profile-picture-2.jpg" },
+  { id: 3, name: "Alice Johnson", image: "/docs/images/people/profile-picture-3.jpg" },
+  { id: 4, name: "Mark Smith", image: "/docs/images/people/profile-picture-4.jpg" },
+  { id: 5, name: "Emma Watson", image: "/docs/images/people/profile-picture-5.jpg" },
+  { id: 6, name: "Jese Leos", image: "/docs/images/people/profile-picture-1.jpg" },
+  { id: 7, name: "Robert Gough", image: "/docs/images/people/profile-picture-2.jpg" },
+  { id: 8, name: "Alice Johnson", image: "/docs/images/people/profile-picture-3.jpg" },
+  { id: 9, name: "Mark Smith", image: "/docs/images/people/profile-picture-4.jpg" },
+  { id: 10, name: "Emma Watson", image: "/docs/images/people/profile-picture-5.jpg" }
+];
 
 const Navbar = (props: {
   onOpenSidenav: () => void;
@@ -18,11 +31,25 @@ const Navbar = (props: {
   [x: string]: any;
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-  
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const { onOpenSidenav, brandText, mini, hovered } = props;
   const [darkmode, setDarkmode] = React.useState(
     document.body.classList.contains('dark'),
   );
+
+  useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsDropdownOpen(false);
+          }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+        };
+      }, []);
   return (
 
     <>
@@ -48,13 +75,39 @@ const Navbar = (props: {
           </NavLink>
         </div>
         <p className="shrink text-lg capitalize text-navy-700 dark:text-white">
-          <NavLink
-            href="#"
-            className="font-bold capitalize hover:text-navy-700 dark:hover:text-white"
-          >
-            {brandText}
-          </NavLink>
-        </p>
+            <NavLink href="#" className="font-bold capitalize hover:text-navy-700 dark:hover:text-white">
+              {brandText}
+            </NavLink>
+            <button
+              id="dropdownUsersButton"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
+              focus:outline-none focus:ring-blue-300 font-bold rounded-md 
+              text-lg p-1.5 m-1 inline-flex items-center dark:bg-blue-600 
+              dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              <svg className="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+              </svg>
+            </button>
+          </p>
+
+          <div className="relative flex items-center top-[100px]">
+            {isDropdownOpen && (
+              <div ref={dropdownRef} id="dropdownUsers" className="absolute mt-2 bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700 z-50">
+                <ul className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
+                {users.map(user => (
+              <li key={user.id}>
+                <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  <img className="w-6 h-6 me-2 rounded-full" src={user.image} alt={user.name} />
+                  {user.name}
+                </a>
+              </li>
+            ))}
+                </ul>
+              </div>
+            )}
+          </div>
       </div>
 
 
@@ -151,3 +204,6 @@ const Navbar = (props: {
 };
 
 export default Navbar;
+
+
+
