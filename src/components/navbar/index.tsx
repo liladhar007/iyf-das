@@ -11,17 +11,12 @@ import avatar from '/public/img/avatars/avatar4.png';
 import Image from 'next/image';
 import { IoPersonAddSharp } from 'react-icons/io5';
 import FormModal from 'components/allifycomponet/Attendence/FormModal';
-const users = [
-  { id: 1, name: "Jese Leos", image: "/docs/images/people/profile-picture-1.jpg" },
-  { id: 2, name: "Robert Gough", image: "/docs/images/people/profile-picture-2.jpg" },
-  { id: 3, name: "Alice Johnson", image: "/docs/images/people/profile-picture-3.jpg" },
-  { id: 4, name: "Mark Smith", image: "/docs/images/people/profile-picture-4.jpg" },
-  { id: 5, name: "Emma Watson", image: "/docs/images/people/profile-picture-5.jpg" },
-  { id: 6, name: "Jese Leos", image: "/docs/images/people/profile-picture-1.jpg" },
-  { id: 7, name: "Robert Gough", image: "/docs/images/people/profile-picture-2.jpg" },
-  { id: 8, name: "Alice Johnson", image: "/docs/images/people/profile-picture-3.jpg" },
-  { id: 9, name: "Mark Smith", image: "/docs/images/people/profile-picture-4.jpg" },
-  { id: 10, name: "Emma Watson", image: "/docs/images/people/profile-picture-5.jpg" }
+
+const facilitators = [
+  { id: 1, name: "John Doe", country: "US" },
+  { id: 2, name: "Jane Smith", country: "UK" },
+  { id: 3, name: "Alice Brown", country: "CA" },
+  { id: 4, name: "Robert Johnson", country: "AU" },
 ];
 
 const Navbar = (props: {
@@ -31,32 +26,22 @@ const Navbar = (props: {
   [x: string]: any;
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
   const { onOpenSidenav, brandText, mini, hovered } = props;
   const [darkmode, setDarkmode] = React.useState(
     document.body.classList.contains('dark'),
   );
 
-  useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-          if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-            setIsDropdownOpen(false);
-          }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
-      }, []);
   return (
 
     <>
     
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
+    <div className='flex items-center justify-between'>
+
+
+
       <div className="ml-[6px]">
-        <div className="h-6 w-[224px] pt-1">
+        <div className="h-6 w-[170px] pt-1">
           <a
             className="text-sm font-normal text-navy-700 hover:underline dark:text-white dark:hover:text-white"
             href=" "
@@ -78,37 +63,36 @@ const Navbar = (props: {
             <NavLink href="#" className="font-bold capitalize hover:text-navy-700 dark:hover:text-white">
               {brandText}
             </NavLink>
-            <button
-              id="dropdownUsersButton"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
-              focus:outline-none focus:ring-blue-300 font-bold rounded-md 
-              text-lg p-1.5 m-1 inline-flex items-center dark:bg-blue-600 
-              dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              <svg className="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-              </svg>
-            </button>
+
+            
+           
           </p>
 
-          <div className="relative flex items-center top-[100px]">
-            {isDropdownOpen && (
-              <div ref={dropdownRef} id="dropdownUsers" className="absolute mt-2 bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700 z-50">
-                <ul className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
-                {users.map(user => (
-              <li key={user.id}>
-                <a href="#" className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                  <img className="w-6 h-6 me-2 rounded-full" src={user.image} alt={user.name} />
-                  {user.name}
-                </a>
-              </li>
-            ))}
-                </ul>
-              </div>
-            )}
-          </div>
       </div>
+      <div className=''>
+<form className="max-w-sm mx-auto">
+      {/* <label id="countries" className="block text-sm font-normal text-gray-900 dark:text-white">
+        Facilitators
+      </label> */}
+      <select
+        id="countries"
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                   focus:ring-blue-500 focus:border-blue-500 block 
+                   w-full md:w-80 lg:w-1/10 p-3 
+                   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
+                   dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      >
+        <option selected>Choose a Facilitator</option>
+        {facilitators.map((facilitator) => (
+          <option key={facilitator.id} value={facilitator.country}>
+            {facilitator.name} ({facilitator.country})
+          </option>
+        ))}
+      </select>
+    </form>
+      </div>
+    </div>
+
 
 
    <div className="relative mt-[3px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full bg-white px-2 py-2 shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[300px] xl:gap-2">
