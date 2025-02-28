@@ -12,7 +12,7 @@ const Facilitators = () => {
   const [selectedFacilitator, setSelectedFacilitator] = useState(null);
 
   return (
-    <div className="p-6 min-h-screen text-gray-900 dark:text-white">
+    <div className="p-2 mt-6 min-h-screen text-gray-900 dark:text-white">
       <div className="overflow-x-auto flex justify-center">
         <table className="w-full border border-gray-300 dark:border-gray-700 shadow-xl rounded-lg overflow-hidden">
           <thead>
