@@ -36,10 +36,7 @@ const Navbar = (props: {
     <>
     
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
-    <div className='flex items-center justify-between'>
-
-
-
+    {/* <div className='flex items-center justify-between'> */}
       <div className="ml-[6px]">
         <div className="h-6 w-[170px] pt-1">
           <a
@@ -69,29 +66,8 @@ const Navbar = (props: {
           </p>
 
       </div>
-      <div className=''>
-<form className="max-w-sm mx-auto">
-      {/* <label id="countries" className="block text-sm font-normal text-gray-900 dark:text-white">
-        Facilitators
-      </label> */}
-      <select
-        id="countries"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                   focus:ring-blue-500 focus:border-blue-500 block 
-                   w-full md:w-80 lg:w-1/10 p-3 
-                   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
-                   dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      >
-        <option selected>Choose a Facilitator</option>
-        {facilitators.map((facilitator) => (
-          <option key={facilitator.id} value={facilitator.country}>
-            {facilitator.name} ({facilitator.country})
-          </option>
-        ))}
-      </select>
-    </form>
-      </div>
-    </div>
+     
+    {/* </div> */}
 
 
 
@@ -177,6 +153,32 @@ const Navbar = (props: {
         </Dropdown>
       </div>
     </nav>
+
+
+    <nav className="sticky top-4 z-10 mt-5 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
+
+    <div className=''>
+<form className="max-w-sm mx-auto">
+   
+      <select
+        id="countries"
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                   focus:ring-blue-500 focus:border-blue-500 block 
+             w-full md:w-80 lg:w-[500px] p-2
+                   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
+                   dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      >
+        <option selected>Facilitator</option>
+        {facilitators.map((facilitator) => (
+          <option key={facilitator.id} value={facilitator.country}>
+            {facilitator.name} ({facilitator.country})
+          </option>
+        ))}
+      </select>
+    </form>
+      </div>
+    </nav>
+
 
        {/* Modal Component */}
        <FormModal
