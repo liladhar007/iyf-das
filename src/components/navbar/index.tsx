@@ -12,12 +12,6 @@ import Image from 'next/image';
 import { IoPersonAddSharp } from 'react-icons/io5';
 import FormModal from 'components/allifycomponet/Attendence/FormModal';
 
-const facilitators = [
-  { id: 1, name: "John Doe", country: "US" },
-  { id: 2, name: "Jane Smith", country: "UK" },
-  { id: 3, name: "Alice Brown", country: "CA" },
-  { id: 4, name: "Robert Johnson", country: "AU" },
-];
 
 const Navbar = (props: {
   onOpenSidenav: () => void;
@@ -153,33 +147,6 @@ const Navbar = (props: {
         </Dropdown>
       </div>
     </nav>
-
-
-    <nav className="sticky top-4 z-10 mt-5 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
-
-    <div className=''>
-<form className="max-w-sm mx-auto">
-   
-      <select
-        id="countries"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                   focus:ring-blue-500 focus:border-blue-500 block 
-             w-full md:w-80 lg:w-[500px] p-2
-                   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
-                   dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      >
-        <option selected>Facilitator</option>
-        {facilitators.map((facilitator) => (
-          <option key={facilitator.id} value={facilitator.country}>
-            {facilitator.name} ({facilitator.country})
-          </option>
-        ))}
-      </select>
-    </form>
-      </div>
-    </nav>
-
-
        {/* Modal Component */}
        <FormModal
         isOpen={isModalOpen}
