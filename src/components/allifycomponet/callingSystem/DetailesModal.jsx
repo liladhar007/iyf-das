@@ -253,7 +253,7 @@ const DetailsModal = ({ isOpen, closeModal, selectedRow }) => {
             <label htmlFor="paymentReceived" className="ml-2 text-sm font-medium text-gray-900">Payment Received</label>
           </div>
           <button onClick={handleFacilitatorChange} className="bg-green-600 text-white px-6 py-2 rounded-lg w-full hover:bg-green-700 transition font-medium">
-            Change Facilitator & Update Payment
+            save
           </button>
           <button onClick={handleSubmit} className="bg-blue-600 text-white px-6 py-2 rounded-lg w-full hover:bg-blue-700 transition font-medium">
             Transfer to DYS
