@@ -41,13 +41,20 @@ const Facilitators = () => {
       </div>
       
       {selectedFacilitator && (
-        <div className="mt-6 p-6 shadow-xl rounded-lg  mx-auto border border-gray-300 dark:border-gray-700">
-          <h3 className="text-xl font-bold mb-2">{selectedFacilitator.name}'s Details</h3>
-          <p><strong>Number:</strong> {selectedFacilitator.number}</p>
-          <p><strong>Class:</strong> {selectedFacilitator.class}</p>
-          <p><strong>Group:</strong> {selectedFacilitator.group}</p>
-          <p><strong>Description:</strong> {selectedFacilitator.details}</p>
-          <button className="mt-4 px-4 py-2 bg-red-500 dark:bg-red-700 text-white rounded hover:bg-red-600 dark:hover:bg-red-800" onClick={() => setSelectedFacilitator(null)}>Close</button>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-lg relative">
+            <button 
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              onClick={() => setSelectedFacilitator(null)}
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-bold mb-2">{selectedFacilitator.name}'s Details</h3>
+            <p><strong>Number:</strong> {selectedFacilitator.number}</p>
+            <p><strong>Class:</strong> {selectedFacilitator.class}</p>
+            <p><strong>Group:</strong> {selectedFacilitator.group}</p>
+            <p><strong>Description:</strong> {selectedFacilitator.details}</p>
+          </div>
         </div>
       )}
     </div>
