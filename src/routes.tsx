@@ -19,9 +19,9 @@ const routes = [
   },
 
   {
-    name: 'My Student',
+    name: 'All Student',
     layout: '/admin',
-    path: '/mystudent',
+    path: '/allstudent',
     icon: <PiStudentBold />,
   },
 
@@ -37,12 +37,12 @@ const routes = [
     path: '/facilitators',
     icon: <IoIosMan />,
   },
-  // {
-  //   name: 'Das-Accounts',
-  //   layout: '/admin',
-  //   path: '/dasAccounts',
-  //   icon: <FaPeopleGroup />,
-  // },
+  {
+    name: 'Das-Accounts',
+    layout: '/admin',
+    path: '/dasAccounts',
+    icon: <FaPeopleGroup />,
+  },
   {
     name: 'Sign In',
     layout: '/auth',
