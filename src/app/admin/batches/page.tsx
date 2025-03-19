@@ -1,5 +1,5 @@
 'use client';
-import Allbatches from 'components/allifycomponet/Allbatches';
+import Allbatches from 'components/allifycomponents/Allbatches';
 import React from 'react';
 
 

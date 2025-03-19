@@ -103,7 +103,7 @@ import { IoMdHome } from 'react-icons/io';
 import { IoDocuments } from 'react-icons/io5';
 import { MdBarChart } from 'react-icons/md';
 import Widget from 'components/widget/Widget';
-import CallingSystem from 'components/allifycomponet/callingSystem';
+import CallingSystem from 'components/allifycomponents/callingSystem';
 
 const facilitators = [
   { id: 0, name: "All", stats: { total: "Rs 2000", pending: "Rs 1262.39", register: "5574", weekly: "615", students: "9333" } },
@@ -165,7 +165,15 @@ const Dashboard = () => {
 
       {/* Charts */}
       <div className="mt-5">
+        <div className='flex justify-between'>
+
+
         <h2 className="text-lg font-bold mb-3 dark:text-white">Calling System</h2>
+      <label className="inline-flex items-center cursor-pointer">
+  <input type="checkbox" value="" className="sr-only peer"/>
+  <div className="relative w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+</label>
+        </div>
         <CallingSystem />
       </div>
     </div>

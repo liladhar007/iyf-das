@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-import Attendence from "components/allifycomponet/Attendence";
+import Attendence from "components/allifycomponents/Attendence";
 
 
 const attendence = () => {

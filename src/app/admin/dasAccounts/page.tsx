@@ -1,4 +1,4 @@
-import DasAccounts from 'components/allifycomponet/DasAccounts'
+import DasAccounts from 'components/allifycomponents/DasAccounts'
 import React from 'react'
 
 const dasAccounts = () => {
