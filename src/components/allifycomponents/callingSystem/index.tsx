@@ -628,7 +628,7 @@ const CallingSystem = () => {
 
   <button
     type="button"
-    className="text-white mt-4 md:mt-0 md:ml-2 bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-lg px-8 py-3.5 text-center"
+    className="text-white mt-4 md:mt-0 md:ml-2 bg-gradient-to-br bg-indigo-900 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-lg px-8 py-3.5 text-center"
   >
     Assign
   </button>
@@ -643,7 +643,7 @@ const CallingSystem = () => {
           getRowId={(row) => row.id.toString()}
           muiTableHeadCellProps={{
             sx: {
-              backgroundColor: '#3730a3',
+              backgroundColor: '#312e81',
               color: 'white',
               fontSize: '16px',
               fontWeight: 'bold',
