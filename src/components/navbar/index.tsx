@@ -11,6 +11,7 @@ import avatar from '/public/img/avatars/avatar4.png';
 import Image from 'next/image';
 import { IoPersonAddSharp } from 'react-icons/io5';
 import FormModal from 'components/allifycomponents/Attendence/FormModal';
+import { toast } from 'react-toastify';
 
 
 const Navbar = (props: {
@@ -19,7 +20,7 @@ const Navbar = (props: {
   secondary?: boolean | string;
   [x: string]: any;
 }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { onOpenSidenav, brandText, mini, hovered } = props;
   const [darkmode, setDarkmode] = React.useState(
     document.body.classList.contains('dark'),
@@ -137,11 +138,16 @@ const Navbar = (props: {
                 Newsletter Settings
               </a>
               <a
-                href=" "
-                className="mt-3 text-sm font-medium text-red-500 hover:text-red-500"
-              >
-                Log Out
-              </a>
+  href="/auth/sign-in"
+  onClick={() => {
+    localStorage.removeItem("token"); 
+    toast.success("Logged out successfully!"); 
+  }}
+  className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 cursor-pointer"
+>
+  Log Out
+</a>
+
             </div>
           </div>
         </Dropdown>
