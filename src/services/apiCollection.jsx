@@ -19,3 +19,29 @@ export const deleteDashboardAccount = async (user_id) => {
     throw error;
   }
 };
+
+
+
+export const submitRegistrationForm = async (formData) => {
+  try {
+    const response = await api.post("/students/save", {
+      name: formData.name,
+      dob: formData.dob,
+      mobile_number: formData.mobile,
+      frontliner_name: formData.frontlinerName,
+      profession: formData.profession.toLowerCase().replace(" ", "_"),
+      address: formData.address,
+      class_mode: formData.classMode.toLowerCase(),
+      payment_mode: formData.paymentMethod.toLowerCase(),
+      payment_amount: formData.amount,
+      payment_status:formData.payment_status,
+      razorpay_payment_id: formData.razorpay_payment_id || null,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error submitting registration form:", error);
+    throw error;
+  }
+};
+

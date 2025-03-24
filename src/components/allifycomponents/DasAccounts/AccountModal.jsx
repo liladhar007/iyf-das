@@ -1,137 +1,50 @@
-
-// 'use client';
-
-// import React, { useState } from 'react';
-// import { X } from 'lucide-react';
-
-// const AccountModal = ({ isOpen, closeModal }) => {
-//   const [newAccount, setNewAccount] = useState({
-//     fullName: '',
-//     number: '',
-//     role: ''
-//   });
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//        setLoading(true);
-   
-//        try {
-//          const { userId, password } = formData;
-//          const data = await loginUser(userId, password);
-   
-//          if (data?.token) {
-        
-//          } else {
-//          }
-//        } catch (err) {
-//          c
-//        } finally {
-//          setLoading(false);
-//        }
-//   };
-
-//   if (!isOpen) return null;
-
-//   return (
-//     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 backdrop-blur-md z-50 p-4">
-//       <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative">
-//         <button onClick={closeModal} className="absolute top-3 right-3 text-gray-700">
-//           <X size={20} />
-//         </button>
-//         <h2 className="text-xl font-bold mb-4 text-center">Create New Account</h2>
-//         <div className="space-y-3">
-//           <input 
-//             type="text" 
-//             placeholder="Full Name" 
-//             className="border p-2 w-full rounded" 
-//             onChange={e => setNewAccount({ ...newAccount, fullName: e.target.value })} 
-//           />
-
-//           <input 
-//             type="text" 
-//             placeholder="Number" 
-//             className="border p-2 w-full rounded" 
-//             onChange={e => setNewAccount({ ...newAccount, number: e.target.value })} 
-//           />
-
-//           <select
-//             id="role"
-//             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-//             onChange={e => setNewAccount({ ...newAccount, role: e.target.value })}
-//           >
-//             <option value="" selected disabled>Choose a role</option>
-//             <option value="admin">Admin</option>
-//             <option value="user">User</option>
-//             <option value="moderator">Moderator</option>
-//           </select>
-
-//           <button 
-//             onClick={handleSubmit} 
-//             className="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700 transition"
-//           >
-//             Create
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AccountModal;
-
 "use client";
 
 import React, { useState } from "react";
 import { X } from "lucide-react";
-import { toast } from "react-toastify";
 import { createDashboardAccount } from "services/authService";
+import { toast } from "react-toastify";
+
+const roles = ["Admin", "User", "Moderator"];
 
 const AccountModal = ({ isOpen, closeModal }) => {
-  const [newAccount, setNewAccount] = useState({
-    fullName: "",
-    number: "",
+  const [formData, setFormData] = useState({
+    name: "",
+    phone_number: "",
     email: "",
     password: "",
     role: "",
   });
 
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     setLoading(true);
 
     try {
-      // Input Validation
-      if (!newAccount.fullName || !newAccount.number || !newAccount.email || !newAccount.password || !newAccount.role) {
-        toast.error("⚠️ All fields are required!");
-        setLoading(false);
-        return;
-      }
+      const response = await createDashboardAccount(
+        formData.name,
+        formData.phone_number,
+        formData.email,
+        formData.password,
+        formData.role
+      );
 
-      // API Payload
-      const payload = {
-        name: newAccount.fullName,
-        phone_number: newAccount.number,
-        email: newAccount.email,
-        password: newAccount.password,
-        role: newAccount.role,
-      };
+      toast.success(response.message || "Account created successfully!");
 
-      console.log("📤 Sending Payload:", payload);
-
-      const data = await createDashboardAccount(payload);
-
-      console.log("✅ API Response:", data);
-
-      if (data) {
-        toast.success("✅ Account created successfully!");
-        setNewAccount({ fullName: "", number: "", email: "", password: "", role: "" }); // Reset fields
-        closeModal(); // Close modal after success
-      }
+      setTimeout(() => {
+        closeModal();
+      }, 1000);
     } catch (err) {
-      console.error("❌ API Error:", err.response?.data || err.message);
-      toast.error(err.response?.data?.error || "❌ Failed to create account!");
+      setError(err.response?.data?.error || "Something went wrong");
+      toast.error(err.response?.data?.error || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -141,75 +54,33 @@ const AccountModal = ({ isOpen, closeModal }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 backdrop-blur-md z-50 p-4">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative">
+      <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow-lg relative">
         {/* Close Button */}
         <button onClick={closeModal} className="absolute top-3 right-3 text-gray-700">
           <X size={20} />
         </button>
 
-        <h2 className="text-xl font-bold mb-4 text-center">Create New Account</h2>
-
-        {/* Form */}
-        <form className="space-y-3" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Full Name"
-            className="border p-2 w-full rounded"
-            value={newAccount.fullName}
-            onChange={(e) => setNewAccount({ ...newAccount, fullName: e.target.value })}
-            required
-          />
-
-          <input
-            type="text"
-            placeholder="Phone Number"
-            className="border p-2 w-full rounded"
-            value={newAccount.number}
-            onChange={(e) => setNewAccount({ ...newAccount, number: e.target.value })}
-            required
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            className="border p-2 w-full rounded"
-            value={newAccount.email}
-            onChange={(e) => setNewAccount({ ...newAccount, email: e.target.value })}
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            className="border p-2 w-full rounded"
-            value={newAccount.password}
-            onChange={(e) => setNewAccount({ ...newAccount, password: e.target.value })}
-            required
-          />
-
-          <select
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            value={newAccount.role}
-            onChange={(e) => setNewAccount({ ...newAccount, role: e.target.value })}
-            required
-          >
-            <option value="" disabled>Choose a role</option>
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
-            <option value="moderator">Moderator</option>
-          </select>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className={`bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700 transition ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            disabled={loading}
-          >
-            {loading ? "Creating..." : "Create"}
-          </button>
-        </form>
+        <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold text-center mb-4">Create Dashboard Account</h2>
+          {error && <div className="bg-red-100 text-red-700 p-2 rounded mb-3">{error}</div>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input type="text" name="name" placeholder="Name" required onChange={handleChange} className="w-full p-2 border rounded" />
+            <input type="text" name="phone_number" placeholder="Phone Number" required onChange={handleChange} className="w-full p-2 border rounded" />
+            <input type="email" name="email" placeholder="Email" required onChange={handleChange} className="w-full p-2 border rounded" />
+            <input type="password" name="password" placeholder="Password" required onChange={handleChange} className="w-full p-2 border rounded" />
+            <select name="role" required onChange={handleChange} className="w-full p-2 border rounded">
+              <option value="">Select Role</option>
+              {roles.map((role) => (
+                <option key={role} value={role}>
+                  {role}
+                </option>
+              ))}
+            </select>
+            <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600" disabled={loading}>
+              {loading ? "Signing Up..." : "Sign Up"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
