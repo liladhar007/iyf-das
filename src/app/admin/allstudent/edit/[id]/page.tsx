@@ -364,7 +364,7 @@ const EditPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    user_id: "",
+    user_id: "",  
     name: "",
     dob: "",
     mobile_number: "",
@@ -392,12 +392,12 @@ const EditPage = () => {
     study_field: "",
     father_occupation: "",
     father_number: "",
-    sankalp_camp: false,
+    sankalp_camp: "",
     registration_date: "",
     gender: "",
     student_status: "",
-    facilitator_id: "",
-    razorpay_payment_id: "",
+    // facilitator_id: "",
+    // razorpay_payment_id: "",
   });
 
   useEffect(() => {

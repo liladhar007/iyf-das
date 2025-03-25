@@ -26,7 +26,7 @@ export const submitRegistrationForm = async (formData) => {
       name: formData.name,
       dob: formData.dob,
       mobile_number: formData.mobile,
-      frontliner_name: formData.frontlinerName,
+      frontliner_id: formData.frontlinerid,
       profession: formData.profession.toLowerCase().replace(" ", "_"),
       address: formData.address,
       class_mode: formData.classMode.toLowerCase(),
@@ -53,7 +53,6 @@ export const fetchAllStudents = async () => {
   }
 };
 
-
 export const updateStudentById = async (user_id, data) => {
   try {
     const response = await api.put(`/students/allStudent/id/${user_id}`, data);
@@ -63,3 +62,18 @@ export const updateStudentById = async (user_id, data) => {
     throw error;
   }
 };
+
+export const frontlinerStudentById = async (frontlinerId) => {
+  try {
+    const response = await api.post("/students/frontliner/id", {
+      frontlinerId,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching students by frontliner ID:", error);
+    throw error;
+  }
+};
+
+
