@@ -135,17 +135,11 @@ const Dashboard = () => {
         />
       </div>
 
-      <div className="mt-5">
-        <h2 className="mb-3 text-lg font-bold dark:text-white">
-          Calling System
-        </h2>
+      <div className="mt-10">
         <CallingSystem />
       </div>
 
       <div className="mt-14">
-        <h2 className="mb-3 text-lg font-bold dark:text-white">
-          Assigned Calling
-        </h2>
         <AssignedCalling />
       </div>
     </div>

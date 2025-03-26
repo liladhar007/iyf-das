@@ -165,6 +165,10 @@ const AllStudent = () => {
     fetchFaculties();
   }, []);
 
+  if (isLoading) {
+    return <div className="mt-7 p-5">Loading...</div>;
+  }
+  
   return (
     <>
     <ToastContainer/>

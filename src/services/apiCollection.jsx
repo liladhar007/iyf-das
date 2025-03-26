@@ -76,4 +76,33 @@ export const frontlinerStudentById = async (frontlinerId) => {
   }
 };
 
+export const updateCallingId = async (user_ids, calling_id) => {
+    try {   
+ const response = await api.post(`/students/update-calling-id`, {
+      user_ids: user_ids,
+      calling_id: calling_id,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating calling_id:', error);
+    throw error;
+  }
+};
 
+export const getUserByCallingId = async () => {
+  try {
+    const calling_id = localStorage.getItem('frontlinerId'); 
+    if (!calling_id) {
+      throw new Error('No calling_id found in localStorage');
+    }
+
+    const response = await api.get(`/students/user-by-calling-id/${calling_id}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error fetching users by calling ID:',
+      error?.response?.data || error.message
+    );
+    throw error;
+  }
+};
