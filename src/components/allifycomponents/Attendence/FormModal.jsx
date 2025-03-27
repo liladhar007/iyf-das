@@ -117,7 +117,9 @@ const RegistrationForm = ({ isOpen, closeModal }) => {
     const method = formData.paymentMethod.toLowerCase();
     const updatedForm = {
       ...formData,
-      payment_status: method === 'unpaid' ? 'not_received' : 'received',
+      // payment_status: method === 'unpaid' ? 'not_received' : 'received',
+      payment_status: method === 'unpaid' || method === 'cash' ? 'not_received' : 'received',
+
     };
 
     if (method === 'online' || method === 'referral') {
