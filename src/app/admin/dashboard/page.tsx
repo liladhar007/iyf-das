@@ -151,15 +151,15 @@
 'use client';
 import { useEffect, useState } from 'react';
 import CallingSystem from 'components/allifycomponents/callingSystem';
-import AssignedCalling from 'components/allifycomponents/callingSystem/AssignedCalling';
-import { getdashboardReport } from 'services/apiCollection';
-import FrontlinerReport from 'components/allifycomponents/FrontlinerReport';
-import FrontlinerCallingSystem from 'components/allifycomponents/callingSystem/Frontliner';
-import { FaCalendarCheck, FaClock, FaUsers, FaWallet } from 'react-icons/fa6';
+// import AssignedCalling from 'components/allifycomponents/callingSystem/AssignedCalling';
+// import { getdashboardReport } from 'services/apiCollection';
+import FrontlinerReport from 'components/allifycomponents/Reports';
+import FrontlinerCallingSystem from 'components/allifycomponents/FrontlinerDas/Frontliner';
+// import { FaCalendarCheck, FaClock, FaUsers, FaWallet } from 'react-icons/fa6';
 
 const Dashboard = () => {
-  const [report, setReport] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  // const [report, setReport] = useState<any>(null);
+  // const [loading, setLoading] = useState(true);
 
   const [role, setRole] = useState(null);
 
@@ -168,22 +168,22 @@ const Dashboard = () => {
     setRole(storedRole);
   }, []);
 
-  useEffect(() => {
-    const fetchReport = async () => {
-      try {
-        const data = await getdashboardReport();
-        setReport(data[0]);
-      } catch (err) {
-        console.error('Failed to fetch dashboard report:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchReport = async () => {
+  //     try {
+  //       const data = await getdashboardReport();
+  //       setReport(data[0]);
+  //     } catch (err) {
+  //       console.error('Failed to fetch dashboard report:', err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchReport();
-  }, []);
+  //   fetchReport();
+  // }, []);
 
-  if (loading) return <div className="p-4">Loading dashboard...</div>;
+  // if (loading) return <div className="p-4">Loading dashboard...</div>;
 
   return (
     <>
@@ -194,67 +194,110 @@ const Dashboard = () => {
               <div></div>
             ) : role === 'frontliner' ? (
               <>
-                <div className="mt-14">
+                {/* <div className="mt-14">
                   <FrontlinerReport />
-                </div>
+                </div> */}
                 <div className="mt-14">
                   <FrontlinerCallingSystem />
                 </div>
-                <div className="mt-14">
+                {/* <div className="mt-14">
                   <AssignedCalling />
-                </div>
+                </div> */}
               </>
             ) : (
               <div>
+
+                {/* <div>
                 <h2 className="mb-3 text-lg font-bold dark:text-white">
                   Dashboard Report
                 </h2>
-                
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-  {/* Total Registered */}
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center space-x-4">
-    <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-      <FaUsers className="text-blue-500 dark:text-blue-300" size={24} />
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Registered</h3>
-      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{report.total_register}</p>
-    </div>
-  </div>
+                <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900">
+                      <FaUsers
+                        className="text-blue-500 dark:text-blue-300"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                        Total Registered
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {report.total_register}
+                      </p>
+                    </div>
+                  </div>
 
-  {/* Total Amount */}
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center space-x-4">
-    <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-      <FaWallet className="text-green-500 dark:text-green-300" size={24} />
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Amount</h3>
-      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{report.total_amount}</p>
-    </div>
-  </div>
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-green-100 p-3 dark:bg-green-900">
+                      <FaWallet
+                        className="text-green-500 dark:text-green-300"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                        Total Amount
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {report.total_amount}
+                      </p>
+                    </div>
+                  </div>
 
-  {/* Pending Amount */}
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center space-x-4">
-    <div className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
-      <FaClock className="text-yellow-500 dark:text-yellow-300" size={24} />
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Pending Amount</h3>
-      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{report.pending_amount}</p>
-    </div>
-  </div>
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-yellow-100 p-3 dark:bg-yellow-900">
+                      <FaClock
+                        className="text-yellow-500 dark:text-yellow-300"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                        Pending Amount
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {report.pending_amount}
+                      </p>
+                    </div>
+                  </div>
 
-  {/* Weekly Registered */}
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center space-x-4">
-    <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
-      <FaCalendarCheck className="text-purple-500 dark:text-purple-300" size={24} />
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Weekly Registered</h3>
-      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{report.weekly_total_registered_student_number}</p>
-    </div>
-  </div>
-</div>
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900">
+                      <FaCalendarCheck
+                        className="text-purple-500 dark:text-purple-300"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                        Weekly Registered
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {report.weekly_total_registered_student_number}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900">
+                      <FaUsers
+                        className="text-blue-900 dark:text-blue-600"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-100">
+                        Weekly Will Come Student
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {report.weekly_will_come_student_number}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                </div> */}
 
                 <div className="mt-10">
                   <CallingSystem />

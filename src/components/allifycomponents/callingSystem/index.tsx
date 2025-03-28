@@ -245,11 +245,6 @@
 
 // export default CallingSystem;
 
-
-
-
-
-
 // 'use client';
 
 // import { useEffect, useMemo, useState } from 'react';
@@ -291,8 +286,6 @@
 //     useState<Frontliner | null>(null);
 //   const [isLoading, setIsLoading] = useState(false);
 //   const [showAssignmentUI, setShowAssignmentUI] = useState(false);
-
-
 
 //   useEffect(() => {
 //     const fetchData = async () => {
@@ -405,7 +398,7 @@
 
 //         <div className="mb-5 mt-0 rounded-md bg-white p-5 shadow-2xl">
 //           {/* Toggle Button */}
-    
+
 //               <div className="mb-4 mt-1 flex justify-end">
 //                 <label className="inline-flex cursor-pointer items-center">
 //                   <input
@@ -417,7 +410,6 @@
 //                   <div className="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-900 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-800 dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-900 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full" />
 //                 </label>
 //               </div>
-      
 
 //           {/* Frontliner Selector */}
 //           {showAssignmentUI && (
@@ -484,8 +476,6 @@
 // };
 
 // export default CallingSystem;
-
-
 
 // 'use client';
 
@@ -746,8 +736,6 @@
 // };
 
 // export default CallingSystem;
-
-
 
 // 'use client';
 
@@ -1064,8 +1052,6 @@
 
 // export default CallingSystem;
 
-
-
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -1077,12 +1063,14 @@ import {
   updateCallingId,
   getFrontlinerReport,
   frontlinerStudentById,
+  getdashboardReport,
 } from 'services/apiCollection';
 import PaymentStatus from './PaymentStatus';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { Autocomplete, TextField } from '@mui/material';
 import ResponseModal from './ResponseModal';
 import { FaCalendarCheck, FaClock, FaUsers, FaWallet } from 'react-icons/fa6';
+import Reports from '../Reports';
 
 type Student = {
   user_id: number;
@@ -1096,6 +1084,15 @@ type Student = {
   payment_status: string;
 };
 
+type AllStudent = {
+  user_id: number;
+  name: string;
+  mobile_number: string;
+  payment_mode: string;
+  registration_date: string;
+  payment_status: string;
+};
+
 type Frontliner = {
   user_id: number;
   name: string;
@@ -1104,28 +1101,34 @@ type Frontliner = {
 };
 
 const CallingSystem = () => {
-  const [data, setData] = useState<Student[]>([]);
+  const [data, setData] = useState<AllStudent[]>([]);
   const [frontliners, setFrontliners] = useState<Frontliner[]>([]);
   const [frontlinerStudents, setFrontlinerStudents] = useState<Student[]>([]);
   const [frontlinerReport, setFrontlinerReport] = useState<any>(null);
   const [selectedRow, setSelectedRow] = useState<Student | null>(null);
+  const [selectedRowData, setSelectedRowData] = useState<AllStudent | null>(
+    null,
+  );
   const [open, setOpen] = useState(false);
+  const [opens, setOpens] = useState(false);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
-  const [selectedFrontliner, setSelectedFrontliner] = useState<Frontliner | null>(null);
+  const [selectedFrontliner, setSelectedFrontliner] =
+    useState<Frontliner | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAssignmentUI, setShowAssignmentUI] = useState(false);
+  const [report, setReport] = useState<any>(null);
 
   // Initial fetch for students and frontliners
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const [studentsRes, frontlinerRes] = await Promise.all([
-          fetchAllStudents(),
-          fetchDashboardAccounts(),
-        ]);
+        const [studentsRes, frontlinerRes, dashboardReport] = await Promise.all(
+          [fetchAllStudents(), fetchDashboardAccounts(), getdashboardReport()],
+        );
         setData(studentsRes.students);
         setFrontliners(frontlinerRes);
+        setReport(dashboardReport[0]);
       } catch (err) {
         console.error('Error fetching data:', err);
         toast.error('Failed to load data');
@@ -1135,6 +1138,21 @@ const CallingSystem = () => {
     };
     fetchData();
   }, []);
+
+  const refreshData = async () => {
+    try {
+      setIsLoading(true);
+      const studentsRes = await fetchAllStudents();
+      setData(studentsRes.students);
+      const data = await getdashboardReport();
+      setReport(data[0]);
+    } catch (err) {
+      console.error('Error refreshing data:', err);
+      toast.error('Failed to refresh data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // When toggling assignment mode, clear selections and API data.
   useEffect(() => {
@@ -1151,75 +1169,137 @@ const CallingSystem = () => {
   }, [showAssignmentUI]);
 
   // Columns for students table (Registration view or frontliner students)
-  const studentColumns = useMemo<MRT_ColumnDef<Student>[]>(() => [
-    { accessorKey: 'name', header: 'Name', size: 180 },
-    { accessorKey: 'mobile_number', header: 'Phone Number', size: 80 },
-    { accessorKey: 'payment_mode', header: 'Payment Mode', size: 80 },
-    { accessorKey: 'registration_date', header: 'Registration Date', size: 80 },
-    { accessorKey: 'profession', header: 'Profession', size: 80 },
-    { accessorKey: 'student_status_date', header: 'Student Status Date', size: 80 },
-    { accessorKey: 'student_status', header: 'Student Status', size: 80 },
-    {
-      accessorKey: 'response',
-      header: 'Calling Response',
-      size: 150,
-      Cell: ({ row }) => (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelectedRow(row.original);
-            setOpen(true);
-          }}
-          className="rounded bg-indigo-900 px-3 py-1 text-white hover:bg-indigo-800"
-        >
-          Respond
-        </button>
-      ),
-    },
-
-    {
-      accessorKey: 'payment_status',
-      header: 'Payment Status',
-      size: 150,
-      Cell: ({ row, cell }) => {
-        const value = cell.getValue<string>();
-        const user = row.original;
-        const handleClick = () => {
-          if (value === 'not_received') {
-            setSelectedRow(user);
-            setOpen(true);
-          }
-        };
-        return (
-          <span
-            onClick={handleClick}
-            style={{
-              color: value === 'received' ? 'green' : 'red',
-              fontWeight: 'bold',
-              cursor: value === 'not_received' ? 'pointer' : 'default',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            {value === 'received' ? (
-              <FaCheckCircle style={{ marginRight: '8px' }} />
-            ) : (
-              <FaTimesCircle style={{ marginRight: '8px' }} />
-            )}
-            {value}
-          </span>
-        );
+  const studentColumns = useMemo<MRT_ColumnDef<Student>[]>(
+    () => [
+      { accessorKey: 'name', header: 'Name', size: 180 },
+      { accessorKey: 'mobile_number', header: 'Phone Number', size: 80 },
+      { accessorKey: 'payment_mode', header: 'Payment Mode', size: 80 },
+      {
+        accessorKey: 'registration_date',
+        header: 'Registration Date',
+        size: 80,
       },
-    },
-  ], []);
+      { accessorKey: 'profession', header: 'Profession', size: 80 },
+      {
+        accessorKey: 'student_status_date',
+        header: 'Student Status Date',
+        size: 80,
+      },
+      { accessorKey: 'student_status', header: 'Student Status', size: 80 },
+      {
+        accessorKey: 'response',
+        header: 'Calling Response',
+        size: 150,
+        Cell: ({ row }) => (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedRow(row.original);
+              setOpen(true);
+            }}
+            className="rounded bg-indigo-900 px-3 py-1 text-white hover:bg-indigo-800"
+          >
+            Respond
+          </button>
+        ),
+      },
+
+      {
+        accessorKey: 'payment_status',
+        header: 'Payment Status',
+        size: 150,
+        Cell: ({ row, cell }) => {
+          const value = cell.getValue<string>();
+          const user = row.original;
+          const handleClick = () => {
+            if (value === 'not_received') {
+              setSelectedRow(user);
+              setOpens(true);
+            }
+          };
+          return (
+            <span
+              onClick={handleClick}
+              style={{
+                color: value === 'received' ? 'green' : 'red',
+                fontWeight: 'bold',
+                cursor: value === 'not_received' ? 'pointer' : 'default',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {value === 'received' ? (
+                <FaCheckCircle style={{ marginRight: '8px' }} />
+              ) : (
+                <FaTimesCircle style={{ marginRight: '8px' }} />
+              )}
+              {value}
+            </span>
+          );
+        },
+      },
+    ],
+    [],
+  );
+  // Columns for AllStudent table (Registration view students)
+  const AllStudentColumns = useMemo<MRT_ColumnDef<AllStudent>[]>(
+    () => [
+      { accessorKey: 'name', header: 'Name', size: 180 },
+      { accessorKey: 'mobile_number', header: 'Phone Number', size: 80 },
+      { accessorKey: 'payment_mode', header: 'Payment Mode', size: 80 },
+      {
+        accessorKey: 'registration_date',
+        header: 'Registration Date',
+        size: 80,
+      },
+      {
+        accessorKey: 'payment_status',
+        header: 'Payment Status',
+        size: 150,
+        Cell: ({ row, cell }) => {
+          const value = cell.getValue<string>();
+          const user = row.original;
+          const handleClick = () => {
+            if (value === 'not_received') {
+              setSelectedRowData(user);
+              setOpens(true);
+            }
+          };
+          return (
+            <span
+              onClick={handleClick}
+              style={{
+                color: value === 'received' ? 'green' : 'red',
+                fontWeight: 'bold',
+                cursor: value === 'not_received' ? 'pointer' : 'default',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {value === 'received' ? (
+                <FaCheckCircle style={{ marginRight: '8px' }} />
+              ) : (
+                <FaTimesCircle style={{ marginRight: '8px' }} />
+              )}
+              {value}
+            </span>
+          );
+        },
+      },
+    ],
+    [],
+  );
 
   // Columns for frontliner selection table
-  const frontlinerColumns = useMemo<MRT_ColumnDef<Frontliner>[]>(() => [
-    // { accessorKey: 'user_id', header: 'ID' },
-    { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'phone_number', header: 'Phone Number' },
-    { accessorKey: 'role', header: 'Role' },
-  ], []);
+  const frontlinerColumns = useMemo<MRT_ColumnDef<Frontliner>[]>(
+    () => [
+      // { accessorKey: 'user_id', header: 'ID' },
+      { accessorKey: 'name', header: 'Name' },
+      { accessorKey: 'phone_number', header: 'Phone Number' },
+      { accessorKey: 'role', header: 'Role' },
+    ],
+    [],
+  );
 
   // When a frontliner row is clicked, call both APIs.
   const handleFrontlinerClick = async (frontliner: Frontliner) => {
@@ -1229,11 +1309,11 @@ const CallingSystem = () => {
 
       // Make sure to check if studentRes.students exists
       const studentRes = await frontlinerStudentById(frontliner.user_id);
-      setFrontlinerStudents(studentRes.users);  // Default to empty array if undefined
+      setFrontlinerStudents(studentRes.users); // Default to empty array if undefined
 
       // getFrontlinerReport
       const reportRes = await getFrontlinerReport(frontliner.user_id);
-      setFrontlinerReport(reportRes[0]);  // Default to empty object if undefined
+      setFrontlinerReport(reportRes[0]); // Default to empty object if undefined
     } catch (error) {
       console.error(error);
       toast.error('Failed to fetch frontliner details');
@@ -1249,7 +1329,9 @@ const CallingSystem = () => {
       .map((row) => row.user_id);
 
     if (!selectedUserIds.length || !selectedFrontliner) {
-      toast.error('Please select at least one student and ensure a frontliner is selected');
+      toast.error(
+        'Please select at least one student and ensure a frontliner is selected',
+      );
       return;
     }
 
@@ -1310,88 +1392,134 @@ const CallingSystem = () => {
             selectedFrontliner ? (
               <>
                 {/* Report Boxes from getFrontlinerReport() */}
-            
 
+                <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {/* Total Registered */}
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900">
+                      <FaUsers
+                        className="text-blue-500 dark:text-blue-300"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                        Total Registered
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {frontlinerReport.total_register}
+                      </p>
+                    </div>
+                  </div>
 
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-  {/* Total Registered */}
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center space-x-4">
-    <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-      <FaUsers className="text-blue-500 dark:text-blue-300" size={24} />
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Registered</h3>
-      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{frontlinerReport.total_register}</p>
-    </div>
-  </div>
+                  {/* Total Amount */}
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-green-100 p-3 dark:bg-green-900">
+                      <FaWallet
+                        className="text-green-500 dark:text-green-300"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                        Total Amount
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {frontlinerReport.total_amount}
+                      </p>
+                    </div>
+                  </div>
 
-  {/* Total Amount */}
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center space-x-4">
-    <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-      <FaWallet className="text-green-500 dark:text-green-300" size={24} />
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Amount</h3>
-      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{frontlinerReport.total_amount}</p>
-    </div>
-  </div>
+                  {/* Pending Amount */}
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-yellow-100 p-3 dark:bg-yellow-900">
+                      <FaClock
+                        className="text-yellow-500 dark:text-yellow-300"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                        Pending Amount
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {frontlinerReport.pending_amount}
+                      </p>
+                    </div>
+                  </div>
 
-  {/* Pending Amount */}
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center space-x-4">
-    <div className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
-      <FaClock className="text-yellow-500 dark:text-yellow-300" size={24} />
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Pending Amount</h3>
-      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{frontlinerReport.pending_amount}</p>
-    </div>
-  </div>
+                  {/* Weekly Registered */}
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900">
+                      <FaCalendarCheck
+                        className="text-purple-500 dark:text-purple-300"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                        Weekly Registered
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {
+                          frontlinerReport.weekly_total_registered_student_number
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  {/*Weekly Will Come Student */}
+                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                    <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900">
+                      <FaUsers
+                        className="text-blue-900 dark:text-blue-600"
+                        size={24}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-100">
+                        Weekly Will Come Student
+                      </h3>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {frontlinerReport.weekly_will_come_student_number}
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-  {/* Weekly Registered */}
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex items-center space-x-4">
-    <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
-      <FaCalendarCheck className="text-purple-500 dark:text-purple-300" size={24} />
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">Weekly Registered</h3>
-      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{frontlinerReport.weekly_total_registered_student_number}</p>
-    </div>
-  </div>
-</div>
-
-
-            <div className="mx-auto mb-5 flex w-full flex-col rounded-md bg-white p-5 shadow-2xl md:flex-row">
-              <Autocomplete
-                id="frontliner-select"
-                options={frontliners}
-                loading={isLoading}
-                getOptionLabel={(option) =>
-                  `${option.user_id} - ${option.name} (${option.role})`
-                }
-                onChange={(event, newValue) => setSelectedFrontliner(newValue)}
-                className="w-full md:flex-grow"
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Select Frontliner"
-                    placeholder="Search..."
-                    fullWidth
+                <div className="mx-auto mb-5 flex w-full flex-col rounded-md bg-white p-5 shadow-2xl md:flex-row">
+                  <Autocomplete
+                    id="frontliner-select"
+                    options={frontliners}
+                    loading={isLoading}
+                    getOptionLabel={(option) =>
+                      `${option.user_id} - ${option.name} (${option.role})`
+                    }
+                    onChange={(event, newValue) =>
+                      setSelectedFrontliner(newValue)
+                    }
+                    className="w-full md:flex-grow"
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Select Frontliner"
+                        placeholder="Search..."
+                        fullWidth
+                      />
+                    )}
                   />
-                )}
-              />
 
-              <button
-                type="button"
-                onClick={handleAssign}
-                className="mt-4 rounded-lg bg-indigo-900 bg-gradient-to-br px-8 py-3.5 text-center text-lg font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 md:ml-2 md:mt-0"
-              >
-                {isLoading ? 'Assigning...' : 'Assign'}
-              </button>
-            </div>
+                  <button
+                    type="button"
+                    onClick={handleAssign}
+                    className="mt-4 rounded-lg bg-indigo-900 bg-gradient-to-br px-8 py-3.5 text-center text-lg font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 md:ml-2 md:mt-0"
+                  >
+                    {isLoading ? 'Assigning...' : 'Assign'}
+                  </button>
+                </div>
                 {/* Frontliner Student Table with checkboxes */}
                 <MaterialReactTable
                   columns={studentColumns}
-                  data={frontlinerStudents ?? []}  // Always pass an array to avoid undefined error
+                  data={frontlinerStudents ?? []} // Always pass an array to avoid undefined error
                   enableSorting
                   enableRowSelection
                   onRowSelectionChange={setRowSelection}
@@ -1407,7 +1535,6 @@ const CallingSystem = () => {
                     },
                   }}
                 />
-
               </>
             ) : (
               // Frontliner Table (for selection) without checkboxes.
@@ -1431,41 +1558,52 @@ const CallingSystem = () => {
               />
             )
           ) : (
-            // Registration view: Students Table
-            <MaterialReactTable
-              columns={studentColumns}
-              data={data}
-              enableSorting
-              enableRowSelection={false}
-              onRowSelectionChange={setRowSelection}
-              state={{ rowSelection }}
-              getRowId={(row) => row.user_id.toString()}
-              muiTableHeadCellProps={{
-                sx: {
-                  backgroundColor: '#312e81',
-                  color: 'white',
-                  fontSize: '16px',
-                  fontWeight: 'bold',
-                  borderRadius: '2px',
-                },
-              }}
-            />
+            <>
+              <div>
+                <h2 className="mb-5 mt-8 text-lg font-bold">
+                  Dashboard Report
+                </h2>
+                <Reports report={report} />
+              </div>
+              {/* // Registration view: Students Table */}
+
+              <h2 className="mb-5 mt-14 text-lg font-bold">Registration</h2>
+              <MaterialReactTable
+                columns={AllStudentColumns}
+                data={data}
+                enableSorting
+                enableRowSelection={false}
+                onRowSelectionChange={setRowSelection}
+                state={{ rowSelection }}
+                getRowId={(row) => row.user_id.toString()}
+                muiTableHeadCellProps={{
+                  sx: {
+                    backgroundColor: '#312e81',
+                    color: 'white',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    borderRadius: '2px',
+                  },
+                }}
+              />
+            </>
           )}
         </div>
       </div>
 
       <PaymentStatus
+        isOpens={opens}
+        closeModal={() => setOpens(false)}
+        selectedRow={selectedRow || selectedRowData}
+        onSuccess={refreshData} // Refresh data after payment status update
+      />
+
+      <ResponseModal
         isOpen={open}
         closeModal={() => setOpen(false)}
         selectedRow={selectedRow}
-        onSuccess={fetchAllStudents}
+        onSuccess={frontlinerStudentById}
       />
-       <ResponseModal
-              isOpen={open}
-              closeModal={() => setOpen(false)}
-              selectedRow={selectedRow}
-              onSuccess={frontlinerStudentById}
-            />
     </>
   );
 };

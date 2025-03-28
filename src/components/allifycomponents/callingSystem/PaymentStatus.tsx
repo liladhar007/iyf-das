@@ -125,12 +125,12 @@ type Student = {
 };
 
 const PaymentStatus = ({
-  isOpen,
+  isOpens,
   closeModal,
   selectedRow,
   onSuccess,
 }: {
-  isOpen: boolean;
+  isOpens: boolean;
   closeModal: () => void;
   selectedRow: Student | null;
   onSuccess: () => void;
@@ -154,7 +154,7 @@ const PaymentStatus = ({
 
   return (
     <Dialog
-      open={isOpen}
+      open={isOpens}
       onClose={closeModal}
       PaperProps={{
         sx: {
