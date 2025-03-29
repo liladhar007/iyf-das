@@ -1059,7 +1059,7 @@ import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { toast } from 'react-toastify';
 import {
   fetchAllStudents,
-  fetchDashboardAccounts,
+  fetchAllFacilitatorOrFrontliner,
   updateCallingId,
   getFrontlinerReport,
   frontlinerStudentById,
@@ -1124,7 +1124,7 @@ const CallingSystem = () => {
       try {
         setIsLoading(true);
         const [studentsRes, frontlinerRes, dashboardReport] = await Promise.all(
-          [fetchAllStudents(), fetchDashboardAccounts(), getdashboardReport()],
+          [fetchAllStudents(), fetchAllFacilitatorOrFrontliner(), getdashboardReport()],
         );
         setData(studentsRes.students);
         setFrontliners(frontlinerRes);
@@ -1185,7 +1185,27 @@ const CallingSystem = () => {
         header: 'Student Status Date',
         size: 80,
       },
-      { accessorKey: 'student_status', header: 'Student Status', size: 80 },
+      {
+        accessorKey: 'student_status',  // Column name in your data
+        header: 'Student Status',
+        size: 80,
+        Cell: ({ cell }) => {
+          // Get the student status value
+          const value = cell.getValue<string>();
+      
+          // Map the value to the readable format
+          const statusMap: { [key: string]: string } = {
+            'will_come': 'Will Come',
+            'not_interested': 'Not Interested',
+            'busy': 'Busy',
+            'might_come': 'Might Come',
+          };
+      
+          // Return the mapped value or the original value if it is unknown
+          return <span>{statusMap[value] || value}</span>;
+        }
+      }
+,      
       {
         accessorKey: 'response',
         header: 'Calling Response',
@@ -1203,25 +1223,32 @@ const CallingSystem = () => {
           </button>
         ),
       },
-
       {
-        accessorKey: 'payment_status',
+        accessorKey: 'payment_status',  // Column name in your data
         header: 'Payment Status',
         size: 150,
         Cell: ({ row, cell }) => {
-          const value = cell.getValue<string>();
-          const user = row.original;
+          const value = cell.getValue<string>(); // Get the payment status value from cell
+          const user = row.original; // Get the original user object
+      
+          // Map database values to user-friendly display values
+          const paymentStatusMap: { [key: string]: string } = {
+            'received': 'Received',
+            'not_received': 'Not Received',
+          };
+      
           const handleClick = () => {
             if (value === 'not_received') {
               setSelectedRow(user);
               setOpens(true);
             }
           };
+      
           return (
             <span
               onClick={handleClick}
               style={{
-                color: value === 'received' ? 'green' : 'red',
+                color: value === 'received' ? 'green' : 'red', // Green for received, red for not received
                 fontWeight: 'bold',
                 cursor: value === 'not_received' ? 'pointer' : 'default',
                 display: 'flex',
@@ -1233,11 +1260,46 @@ const CallingSystem = () => {
               ) : (
                 <FaTimesCircle style={{ marginRight: '8px' }} />
               )}
-              {value}
+              {paymentStatusMap[value] || value} {/* Display the mapped value */}
             </span>
           );
         },
-      },
+      }
+      
+      // {
+      //   accessorKey: 'payment_status',
+      //   header: 'Payment Status',
+      //   size: 150,
+      //   Cell: ({ row, cell }) => {
+      //     const value = cell.getValue<string>();
+      //     const user = row.original;
+      //     const handleClick = () => {
+      //       if (value === 'not_received') {
+      //         setSelectedRow(user);
+      //         setOpens(true);
+      //       }
+      //     };
+      //     return (
+      //       <span
+      //         onClick={handleClick}
+      //         style={{
+      //           color: value === 'received' ? 'green' : 'red',
+      //           fontWeight: 'bold',
+      //           cursor: value === 'not_received' ? 'pointer' : 'default',
+      //           display: 'flex',
+      //           alignItems: 'center',
+      //         }}
+      //       >
+      //         {value === 'received' ? (
+      //           <FaCheckCircle style={{ marginRight: '8px' }} />
+      //         ) : (
+      //           <FaTimesCircle style={{ marginRight: '8px' }} />
+      //         )}
+      //         {value}
+      //       </span>
+      //     );
+      //   },
+      // },
     ],
     [],
   );
@@ -1281,11 +1343,11 @@ const CallingSystem = () => {
               ) : (
                 <FaTimesCircle style={{ marginRight: '8px' }} />
               )}
-              {value}
+              {value === 'received' ? 'Received' : 'Not Received'} {/* Capitalized status */}
             </span>
           );
         },
-      },
+      }
     ],
     [],
   );
@@ -1361,10 +1423,11 @@ const CallingSystem = () => {
             selectedFrontliner ? (
               <>Calling System - {selectedFrontliner.name}</>
             ) : (
-              <>Select a Frontliner</>
+              <></>
+              // <>Select a Frontliner</>
             )
           ) : (
-            <>Registration</>
+            <>Dashboard Report</>
           )}
         </h2>
 
@@ -1560,9 +1623,6 @@ const CallingSystem = () => {
           ) : (
             <>
               <div>
-                <h2 className="mb-5 mt-8 text-lg font-bold">
-                  Dashboard Report
-                </h2>
                 <Reports report={report} />
               </div>
               {/* // Registration view: Students Table */}

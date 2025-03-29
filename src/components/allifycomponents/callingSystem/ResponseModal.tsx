@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Dialog,
   DialogTitle,
@@ -43,7 +44,7 @@ const ResponseModal = ({
         setResponse('');
         closeModal();
         onSuccess(); // Fetch updated data
-      }, 2000);
+      }, 3000);
     } catch (err) {
       console.error(err);
       toast.error('Failed to submit response');

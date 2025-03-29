@@ -153,7 +153,7 @@ import { useEffect, useState } from 'react';
 import CallingSystem from 'components/allifycomponents/callingSystem';
 // import AssignedCalling from 'components/allifycomponents/callingSystem/AssignedCalling';
 // import { getdashboardReport } from 'services/apiCollection';
-import FrontlinerReport from 'components/allifycomponents/Reports';
+// import FrontlinerReport from 'components/allifycomponents/Reports';
 import FrontlinerCallingSystem from 'components/allifycomponents/FrontlinerDas/Frontliner';
 // import { FaCalendarCheck, FaClock, FaUsers, FaWallet } from 'react-icons/fa6';
 

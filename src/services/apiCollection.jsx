@@ -9,6 +9,15 @@ export const fetchDashboardAccounts = async () => {
     throw error;
   }
 };
+export const fetchAllFacilitatorOrFrontliner = async () => {
+  try {
+    const response = await api.get('/students/allFacilitatorOrFrontliner');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching dashboard accounts:', error);
+    throw error;
+  }
+};
 
 export const deleteDashboardAccount = async (user_id) => {
   try {
