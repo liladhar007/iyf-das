@@ -12,16 +12,18 @@ import { useDashboardContext } from 'contexts/DashboardContext';
 
 const RegistrationForm = ({ isOpen, closeModal }) => {
   const { triggerUpdate } = useDashboardContext();  
-// Retrieve frontliner details from localStorage
-const frontlinerName = localStorage.getItem('name'); 
-const frontlinerId = localStorage.getItem('frontlinerId'); 
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+ // Retrieve frontliner details from localStorage
+ const frontlinerName = localStorage.getItem('name'); 
+ const frontlinerId = localStorage.getItem('frontlinerId'); 
 
   const [formData, setFormData] = useState({
     name: '',
     dob: '',
     mobile: '',
     frontlinerid: '',
-    calling_id:frontlinerId,
     profession: '',
     address: '',
     classMode: '',
@@ -30,11 +32,6 @@ const frontlinerId = localStorage.getItem('frontlinerId');
     razorpay_payment_id: '',
   });
 
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
- 
-
 
   const resetForm = () => {
     setFormData({
@@ -42,7 +39,6 @@ const frontlinerId = localStorage.getItem('frontlinerId');
       dob: '',
       mobile: '',
       frontlinerid: '',
-      calling_id:frontlinerId,
       profession: '',
       address: '',
       classMode: '',

@@ -22,7 +22,7 @@ const Reports = ({ report }: { report: any }) => {
               Total Registered
             </h3>
             <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {report.total_register}
+              {report.total_register || 0}
             </p>
           </div>
         </div>
@@ -40,7 +40,7 @@ const Reports = ({ report }: { report: any }) => {
               Total Amount
             </h3>
             <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {report.total_amount}
+              {report.total_amount || 0}
             </p>
           </div>
         </div>
@@ -58,7 +58,7 @@ const Reports = ({ report }: { report: any }) => {
               Pending Amount
             </h3>
             <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {report.pending_amount}
+              {report.pending_amount || 0}
             </p>
           </div>
         </div>
@@ -76,7 +76,7 @@ const Reports = ({ report }: { report: any }) => {
               Weekly Registered
             </h3>
             <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {report.weekly_total_registered_student_number}
+              {report.weekly_total_registered_student_number || 0}
             </p>
           </div>
         </div>
@@ -91,7 +91,7 @@ const Reports = ({ report }: { report: any }) => {
               Weekly Will Come Student
             </h3>
             <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {report.weekly_will_come_student_number}
+              {report.weekly_will_come_student_number || 0}
             </p>
           </div>
         </div>

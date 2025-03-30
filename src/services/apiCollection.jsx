@@ -36,6 +36,7 @@ export const submitRegistrationForm = async (formData) => {
       dob: formData.dob,
       mobile_number: formData.mobile,
       frontliner_id: formData.frontlinerid,
+      calling_id: formData.frontlinerid,
       profession: formData.profession.toLowerCase().replace(' ', '_'),
       address: formData.address,
       class_mode: formData.classMode.toLowerCase(),
@@ -112,6 +113,20 @@ export const getUserByCallingId = async () => {
   } catch (error) {
     console.error(
       'Error fetching users by calling ID:',
+      error?.response?.data || error.message,
+    );
+    throw error;
+  }
+};
+export const frontlinerStudentByIdOfcallingId = async (frontliner_id) => {
+  try {
+    const response = await api.get(
+      `/students/frontlinerStudentByIdOfcallingId/${frontliner_id}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error fetching users by calling assing user ID:',
       error?.response?.data || error.message,
     );
     throw error;

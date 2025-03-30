@@ -1,22 +1,20 @@
-
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import {
   fetchAllStudents,
   fetchAllFacilitatorOrFrontliner,
   updateCallingId,
   getFrontlinerReport,
-  frontlinerStudentById,
+  frontlinerStudentByIdOfcallingId,
   getdashboardReport,
 } from 'services/apiCollection';
 import PaymentStatus from './PaymentStatus';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { Autocomplete, TextField } from '@mui/material';
 import ResponseModal from './ResponseModal';
-import { FaCalendarCheck, FaClock, FaUsers, FaWallet } from 'react-icons/fa6';
 import Reports from '../Reports';
 
 type Student = {
@@ -71,7 +69,11 @@ const CallingSystem = () => {
       try {
         setIsLoading(true);
         const [studentsRes, frontlinerRes, dashboardReport] = await Promise.all(
-          [fetchAllStudents(), fetchAllFacilitatorOrFrontliner(), getdashboardReport()],
+          [
+            fetchAllStudents(),
+            fetchAllFacilitatorOrFrontliner(),
+            getdashboardReport(),
+          ],
         );
         setData(studentsRes.students);
         setFrontliners(frontlinerRes);
@@ -100,7 +102,7 @@ const CallingSystem = () => {
       setIsLoading(false);
     }
   };
-  
+
   // When toggling assignment mode, clear selections and API data.
   useEffect(() => {
     if (!showAssignmentUI) {
@@ -133,26 +135,25 @@ const CallingSystem = () => {
         size: 80,
       },
       {
-        accessorKey: 'student_status',  // Column name in your data
+        accessorKey: 'student_status', // Column name in your data
         header: 'Student Status',
         size: 80,
         Cell: ({ cell }) => {
           // Get the student status value
           const value = cell.getValue<string>();
-      
+
           // Map the value to the readable format
           const statusMap: { [key: string]: string } = {
-            'will_come': 'Will Come',
-            'not_interested': 'Not Interested',
-            'busy': 'Busy',
-            'might_come': 'Might Come',
+            will_come: 'Will Come',
+            not_interested: 'Not Interested',
+            busy: 'Busy',
+            might_come: 'Might Come',
           };
-      
+
           // Return the mapped value or the original value if it is unknown
           return <span>{statusMap[value] || value}</span>;
-        }
-      }
-,      
+        },
+      },
       {
         accessorKey: 'response',
         header: 'Calling Response',
@@ -171,26 +172,26 @@ const CallingSystem = () => {
         ),
       },
       {
-        accessorKey: 'payment_status',  // Column name in your data
+        accessorKey: 'payment_status', // Column name in your data
         header: 'Payment Status',
         size: 150,
         Cell: ({ row, cell }) => {
           const value = cell.getValue<string>(); // Get the payment status value from cell
           const user = row.original; // Get the original user object
-      
+
           // Map database values to user-friendly display values
           const paymentStatusMap: { [key: string]: string } = {
-            'received': 'Received',
-            'not_received': 'Not Received',
+            received: 'Received',
+            not_received: 'Not Received',
           };
-      
+
           const handleClick = () => {
             if (value === 'not_received') {
               setSelectedRow(user);
               setOpens(true);
             }
           };
-      
+
           return (
             <span
               onClick={handleClick}
@@ -207,11 +208,12 @@ const CallingSystem = () => {
               ) : (
                 <FaTimesCircle style={{ marginRight: '8px' }} />
               )}
-              {paymentStatusMap[value] || value} {/* Display the mapped value */}
+              {paymentStatusMap[value] || value}{' '}
+              {/* Display the mapped value */}
             </span>
           );
         },
-      }
+      },
     ],
     [],
   );
@@ -255,11 +257,12 @@ const CallingSystem = () => {
               ) : (
                 <FaTimesCircle style={{ marginRight: '8px' }} />
               )}
-              {value === 'received' ? 'Received' : 'Not Received'} {/* Capitalized status */}
+              {value === 'received' ? 'Received' : 'Not Received'}{' '}
+              {/* Capitalized status */}
             </span>
           );
         },
-      }
+      },
     ],
     [],
   );
@@ -282,8 +285,8 @@ const CallingSystem = () => {
       setIsLoading(true);
 
       // Make sure to check if studentRes.students exists
-      const studentRes = await frontlinerStudentById(frontliner.user_id);
-      setFrontlinerStudents(studentRes.users); // Default to empty array if undefined
+      const studentRes = await frontlinerStudentByIdOfcallingId(frontliner.user_id);
+      setFrontlinerStudents(studentRes.data); // Default to empty array if undefined
 
       // getFrontlinerReport
       const reportRes = await getFrontlinerReport(frontliner.user_id);
@@ -299,9 +302,9 @@ const CallingSystem = () => {
   const refreshDatafrontliner = (frontliner: Frontliner) => {
     setSelectedFrontliner(frontliner);
     setIsLoading(true);
-      frontlinerStudentById(frontliner.user_id)
+    frontlinerStudentByIdOfcallingId(frontliner.user_id)
       .then((studentRes) => {
-        setFrontlinerStudents(studentRes.users);
+        setFrontlinerStudents(studentRes.data);
         return getFrontlinerReport(frontliner.user_id);
       })
       .then((reportRes) => {
@@ -315,8 +318,7 @@ const CallingSystem = () => {
         setIsLoading(false);
       });
   };
-  
-  
+
   // For assigning calling ID from frontliner student view.
   const handleAssign = async () => {
     const selectedUserIds = frontlinerStudents
@@ -350,6 +352,7 @@ const CallingSystem = () => {
 
   return (
     <>
+    <ToastContainer/>
       <div className="mt-12">
         <h2 className="mb-3 text-lg font-bold dark:text-white">
           {showAssignmentUI ? (
@@ -389,103 +392,15 @@ const CallingSystem = () => {
               <>
                 {/* Report Boxes from getFrontlinerReport() */}
 
-                <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {/* Total Registered */}
-                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-                    <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900">
-                      <FaUsers
-                        className="text-blue-500 dark:text-blue-300"
-                        size={24}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
-                        Total Registered
-                      </h3>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        {frontlinerReport.total_register}
-                      </p>
-                    </div>
-                  </div>
+                <Reports report={frontlinerReport} />
 
-                  {/* Total Amount */}
-                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-                    <div className="rounded-full bg-green-100 p-3 dark:bg-green-900">
-                      <FaWallet
-                        className="text-green-500 dark:text-green-300"
-                        size={24}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
-                        Total Amount
-                      </h3>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        {frontlinerReport.total_amount}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Pending Amount */}
-                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-                    <div className="rounded-full bg-yellow-100 p-3 dark:bg-yellow-900">
-                      <FaClock
-                        className="text-yellow-500 dark:text-yellow-300"
-                        size={24}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
-                        Pending Amount
-                      </h3>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        {frontlinerReport.pending_amount}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Weekly Registered */}
-                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-                    <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900">
-                      <FaCalendarCheck
-                        className="text-purple-500 dark:text-purple-300"
-                        size={24}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
-                        Weekly Registered
-                      </h3>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        {
-                          frontlinerReport.weekly_total_registered_student_number
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  {/*Weekly Will Come Student */}
-                  <div className="flex items-center space-x-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-                    <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900">
-                      <FaUsers
-                        className="text-blue-900 dark:text-blue-600"
-                        size={24}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-100">
-                        Weekly Will Come Student
-                      </h3>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        {frontlinerReport.weekly_will_come_student_number}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* <div className="mx-auto mb-5 flex w-full flex-col rounded-md bg-white p-5 shadow-2xl md:flex-row">
+                <div className="mx-auto mb-5 flex w-full flex-col rounded-md bg-white p-5 shadow-2xl md:flex-row">
                   <Autocomplete
                     id="frontliner-select"
-                    options={frontliners}
+                    options={frontliners.filter(
+                      (frontliner) =>
+                        frontliner.user_id !== selectedFrontliner?.user_id, // Filter out selected frontliner
+                    )}
                     loading={isLoading}
                     getOptionLabel={(option) =>
                       `${option.user_id} - ${option.name} (${option.role})`
@@ -511,39 +426,7 @@ const CallingSystem = () => {
                   >
                     {isLoading ? 'Assigning...' : 'Assign'}
                   </button>
-                </div> */}
-                <div className="mx-auto mb-5 flex w-full flex-col rounded-md bg-white p-5 shadow-2xl md:flex-row">
-  <Autocomplete
-    id="frontliner-select"
-    options={frontliners.filter(
-      (frontliner) => frontliner.user_id !== selectedFrontliner?.user_id // Filter out selected frontliner
-    )}
-    loading={isLoading}
-    getOptionLabel={(option) =>
-      `${option.user_id} - ${option.name} (${option.role})`
-    }
-    onChange={(event, newValue) =>
-      setSelectedFrontliner(newValue)
-    }
-    className="w-full md:flex-grow"
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        label="Select Frontliner and Facilitator"
-        placeholder="Search..."
-        fullWidth
-      />
-    )}
-  />
-
-  <button
-    type="button"
-    onClick={handleAssign}
-    className="mt-4 rounded-lg bg-indigo-900 bg-gradient-to-br px-8 py-3.5 text-center text-lg font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 md:ml-2 md:mt-0"
-  >
-    {isLoading ? 'Assigning...' : 'Assign'}
-  </button>
-</div>
+                </div>
 
                 {/* Frontliner Student Table with checkboxes */}
                 <MaterialReactTable
@@ -629,7 +512,6 @@ const CallingSystem = () => {
         closeModal={() => setOpen(false)}
         selectedRow={selectedRow}
         onSuccess={() => refreshDatafrontliner(selectedFrontliner)} // Now calling the updated function
-
       />
     </>
   );
