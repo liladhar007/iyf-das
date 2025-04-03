@@ -138,7 +138,8 @@ export const getdashboardReport = async () => {
     const response = await api.get(`/dashboar/dashboard-report`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching getdashboardReport',
+    console.error(
+      'Error fetching getdashboardReport',
       error?.response?.data || error.message,
     );
     throw error;
@@ -158,10 +159,8 @@ export const updateStudentStatus = async (useId, studentStatus) => {
   }
 };
 
-
 export const getFrontlinerReport = async (calling_id) => {
   try {
-
     const response = await api.get(`/dashboar/frontliner-report/${calling_id}`);
     return response.data;
   } catch (error) {
@@ -173,7 +172,6 @@ export const getFrontlinerReport = async (calling_id) => {
   }
 };
 
-
 export const updatePaymentStatus = async (user_id, payment_status) => {
   try {
     const response = await api.post('/students/update-payment-status', {
@@ -183,6 +181,75 @@ export const updatePaymentStatus = async (user_id, payment_status) => {
     return response.data;
   } catch (error) {
     console.error('Error updating payment status:', error);
+    throw error;
+  }
+};
+
+export const batchCreateBatch = async (payload) => {
+  try {
+    const response = await api.post('/batch/createBatch', payload);
+    return response.data;
+  } catch (error) {
+    console.error('Error Batch create!:', error);
+    throw error;
+  }
+};
+
+export const getAllBatches = async () => {
+  try {
+    const response = await api.get('/batch/allBatches');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching batches:', error);
+    throw error;
+  }
+};
+export const getBatchesByfacilitatorId = async (facilitatorId) => {
+  try {
+    const response = await api.get(
+      `/batch/getBatchesByfacilitatorId/${facilitatorId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching batches:', error);
+    throw error;
+  }
+};
+
+export const updateBatchStartStatus = async (batchId, isStart) => {
+  try {
+    const response = await api.put('/batch/update-batch-start', {
+      batchId,
+      isStart,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating batch is_start status:', error);
+    throw error;
+  }
+};
+
+export const markAttendance = async (AttendanceSession, StudentId) => {
+  try {
+    const response = await api.post('/attendance/markAttendance', {
+      AttendanceSession,
+      StudentId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error marking attendance:', error);
+    throw error;
+  }
+};
+
+
+
+export const getUsersByBatchId = async (batchId) => {
+  try {
+    const response = await api.get(`/students/batch/${batchId}`);
+    return response.data.users;
+  } catch (error) {
+    console.error('Error fetching users by batchId:', error);
     throw error;
   }
 };
