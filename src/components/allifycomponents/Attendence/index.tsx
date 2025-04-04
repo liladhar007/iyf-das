@@ -325,8 +325,6 @@ const Attendance = () => {
       setTimeout(() => {
         fetchData();
       }, 1000);
-      
-      // await fetchData(); // refresh list
     } catch (error) {
       console.error('Attendance submission failed:', error);
       toast.error('❌ Failed to submit attendance.');
