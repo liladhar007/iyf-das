@@ -325,6 +325,7 @@ const Attendance = () => {
       setTimeout(() => {
         fetchData();
       }, 1000);
+      
     } catch (error) {
       console.error('Attendance submission failed:', error);
       toast.error('❌ Failed to submit attendance.');
