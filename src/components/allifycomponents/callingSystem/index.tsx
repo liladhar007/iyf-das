@@ -526,7 +526,7 @@ import { useRouter } from 'next/navigation';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { toast, ToastContainer } from 'react-toastify';
 import { fetchAllStudents, getdashboardReport } from 'services/apiCollection';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaPhoneAlt, FaTimesCircle } from 'react-icons/fa';
 import PaymentStatus from './PaymentStatus';
 import Reports from '../Reports';
 import 'react-toastify/dist/ReactToastify.css';
@@ -576,7 +576,15 @@ const CallingSystem = () => {
   const AllStudentColumns = useMemo<MRT_ColumnDef<AllStudent>[]>(
     () => [
       { accessorKey: 'name', header: 'Name', size: 180 },
-      { accessorKey: 'mobile_number', header: 'Phone Number', size: 80 },
+      { accessorKey: 'mobile_number', header: 'Phone Number', size: 80,Cell: ({ row }) => (
+              <a
+                href={`tel:${row.original.mobile_number}`}
+                className="flex items-center space-x-4 px-4 py-2 rounded-lg bg-indigo-900 text-white hover:bg-indigo-800 transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                <FaPhoneAlt className="text-xl" />
+                <span className="text-sm md:text-base">{row.original.mobile_number}</span>
+              </a>
+            ), },
       { accessorKey: 'payment_mode', header: 'Payment Mode', size: 80 },
       {
         accessorKey: 'registration_date',
@@ -590,12 +598,19 @@ const CallingSystem = () => {
         Cell: ({ row, cell }) => {
           const value = cell.getValue<string>();
           const user = row.original;
+  
+          const paymentStatusMap: Record<string, string> = {
+            received: 'Received',
+            not_received: 'Not Received',
+          };
+  
           const handleClick = () => {
             if (value === 'not_received') {
               setSelectedRowData(user);
               setOpens(true);
             }
           };
+  
           return (
             <span
               onClick={handleClick}
@@ -612,11 +627,45 @@ const CallingSystem = () => {
               ) : (
                 <FaTimesCircle style={{ marginRight: '8px' }} />
               )}
-              {value === 'received' ? 'Received' : 'Not Received'}
+              {paymentStatusMap[value] || value}
             </span>
           );
         },
       },
+      // {
+      //   accessorKey: 'payment_status',
+      //   header: 'Payment Status',
+      //   size: 150,
+      //   Cell: ({ row, cell }) => {
+      //     const value = cell.getValue<string>();
+      //     const user = row.original;
+      //     const handleClick = () => {
+      //       if (value === 'not_received') {
+      //         setSelectedRowData(user);
+      //         setOpens(true);
+      //       }
+      //     };
+      //     return (
+      //       <span
+      //         onClick={handleClick}
+      //         style={{
+      //           color: value === 'received' ? 'green' : 'red',
+      //           fontWeight: 'bold',
+      //           cursor: value === 'not_received' ? 'pointer' : 'default',
+      //           display: 'flex',
+      //           alignItems: 'center',
+      //         }}
+      //       >
+      //         {value === 'received' ? (
+      //           <FaCheckCircle style={{ marginRight: '8px' }} />
+      //         ) : (
+      //           <FaTimesCircle style={{ marginRight: '8px' }} />
+      //         )}
+      //         {value === 'received' ? 'Received' : 'Not Received'}
+      //       </span>
+      //     );
+      //   },
+      // },
     ],
     [],
   );

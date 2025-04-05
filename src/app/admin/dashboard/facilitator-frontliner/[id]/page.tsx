@@ -10,7 +10,7 @@ import {
   getFrontlinerReport,
   frontlinerStudentByIdOfcallingId,
 } from 'services/apiCollection';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaPhoneAlt, FaTimesCircle } from 'react-icons/fa';
 import { Autocomplete, TextField } from '@mui/material';
 import ResponseModal from 'components/allifycomponents/callingSystem/ResponseModal';
 import PaymentStatus from 'components/allifycomponents/callingSystem/PaymentStatus';
@@ -85,7 +85,15 @@ const FrontlinerCallingPage = () => {
 
   const studentColumns = useMemo<MRT_ColumnDef<Student>[]>(() => [
     { accessorKey: 'name', header: 'Name', size: 180 },
-    { accessorKey: 'mobile_number', header: 'Phone Number', size: 80 },
+    { accessorKey: 'mobile_number', header: 'Phone Number', size: 80 , Cell: ({ row }) => (
+      <a
+        href={`tel:${row.original.mobile_number}`}
+        className="flex items-center space-x-4 px-4 py-2 rounded-lg bg-indigo-900 text-white hover:bg-indigo-800 transition duration-300 ease-in-out transform hover:scale-105"
+      >
+        <FaPhoneAlt className="text-xl" />
+        <span className="text-sm md:text-base">{row.original.mobile_number}</span>
+      </a>
+    ),},
     { accessorKey: 'payment_mode', header: 'Payment Mode', size: 80 },
     {
       accessorKey: 'registration_date',
