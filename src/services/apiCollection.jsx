@@ -65,7 +65,7 @@ export const fetchAllStudents = async () => {
 
 export const updateStudentById = async (user_id, data) => {
   try {
-    const response = await api.put(`/students/allStudent/id/${user_id}`, data);
+    const response = await api.put(`/students/updateStudentById/id/${user_id}`, data);
     return response.data;
   } catch (error) {
     console.error('Error updating student:', error);
@@ -242,14 +242,21 @@ export const markAttendance = async (AttendanceSession, StudentId) => {
   }
 };
 
-
-
 export const getUsersByBatchId = async (batchId) => {
   try {
     const response = await api.get(`/students/batch/${batchId}`);
     return response.data.users;
   } catch (error) {
     console.error('Error fetching users by batchId:', error);
+    throw error;
+  }
+};
+export const getUsersByUserId = async (user_id) => {
+  try {
+    const response = await api.get(`/students/getStudent/${user_id}`);
+    return response.data.users;
+  } catch (error) {
+    console.error('Error fetching users by user_id', error);
     throw error;
   }
 };
