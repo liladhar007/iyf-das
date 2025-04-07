@@ -241,6 +241,13 @@ const FacilitatorDetails = () => {
         header: 'Name',
         size: 200,
       },
+     
+      {
+        accessorKey: 'profession',
+        header: 'Profession',
+        size: 150,
+        Cell: ({ cell }) => formatProfession(cell.getValue() as string),
+      },
       {
         accessorKey: 'mobile_number',
         header: 'Phone Number',
@@ -256,12 +263,6 @@ const FacilitatorDetails = () => {
             </span>
           </a>
         ),
-      },
-      {
-        accessorKey: 'profession',
-        header: 'Profession',
-        size: 150,
-        Cell: ({ cell }) => formatProfession(cell.getValue() as string),
       },
       {
         accessorKey: 'Change Group',
@@ -280,6 +281,7 @@ const FacilitatorDetails = () => {
           </button>
         ),
       },
+     
     ],
     [],
   );
