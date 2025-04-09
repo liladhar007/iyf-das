@@ -65,27 +65,21 @@ function SidebarHorizon(props: { routes: IRoute[]; [x: string]: any }) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // userRole को lowercase और trim करके प्राप्त करें
       const userRole = localStorage.getItem('role')?.toLowerCase().trim();
-      console.log('🧠 User Role:', userRole);
-      console.log('📦 All Routes:', routes);
-
+    
       routes.forEach(route => {
-        console.log(
-          `🔍 Route: ${route.name} | roles: ${JSON.stringify(route.roles)} | Type: ${typeof route.roles}`
-        );
+        // console.log(
+        //   `🔍 Route: ${route.name} | roles: ${JSON.stringify(route.roles)} | Type: ${typeof route.roles}`
+        // );
       });
 
       if (userRole) {
         const filtered = routes.filter(route => {
           const lowerCaseRoles = route.roles?.map(r => r.toLowerCase());
           const includesRole = lowerCaseRoles?.includes(userRole);
-          console.log(
-            `👉 Checking route "${route.name}": lowerCaseRoles = ${JSON.stringify(lowerCaseRoles)} , includes "${userRole}" = ${includesRole}`
-          );
+    
           return includesRole;
         });
-        console.log('✅ Filtered Routes:', filtered);
         setFilteredRoutes(filtered);
       } else {
         setFilteredRoutes([]);
