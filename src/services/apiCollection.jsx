@@ -273,15 +273,16 @@ export const updateStudentGroupWiseName = async (user_id, newGroupName) => {
     throw error;
   }
 };
-export const getStudentGroupWise = async (facilitatorId, groupname) => {
+export const getFrontlinerdetailReport = async (facilitatorId, group_name,mouth) => {
   try {
-    const response = await api.post('/attendance/getStudentGroupWise', {
+    const response = await api.post('/attendance/getFrontlinerdetailReport', {
       facilitatorId,
-      groupname,
+      group_name,
+      mouth
     });
     return response.data;
   } catch (error) {
-    console.error('Error getStudentGroupWise :', error);
+    console.error('Error getFrontlinerdetailReport :', error);
     throw error;
   }
 };
