@@ -273,12 +273,11 @@ export const updateStudentGroupWiseName = async (user_id, newGroupName) => {
     throw error;
   }
 };
-export const getFrontlinerdetailReport = async (facilitatorId, group_name,mouth) => {
+export const getFrontlinerdetailReport = async (facilitatorId, group_name) => {
   try {
     const response = await api.post('/attendance/getFrontlinerdetailReport', {
       facilitatorId,
       group_name,
-      mouth
     });
     return response.data;
   } catch (error) {
@@ -296,6 +295,16 @@ export const getGroupUserCount = async (facilitatorId) => {
     return response.data;
   } catch (error) {
     console.error('Error getGroupUserCount :', error);
+    throw error;
+  }
+};
+
+export const getStudentClassReport = async (user_id) => {
+  try {
+    const res = await api.post('/attendance/getStudentClassReport', { user_id });
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching class report:', error);
     throw error;
   }
 };
