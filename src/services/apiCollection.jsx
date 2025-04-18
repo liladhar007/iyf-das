@@ -308,3 +308,12 @@ export const getStudentClassReport = async (user_id) => {
     throw error;
   }
 };
+export const getStudentReport = async (groupName,month,year) => {
+  try {
+    const res = await api.post('/attendance/getStudentReport', { groupName,month,year });
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching class getStudentReport:', error);
+    throw error;
+  }
+};
